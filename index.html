@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Digital Clock</title>
+
+  <style>
+    @font-face {  font-family: "FX_LED";  src: url("https://cdn.jsdelivr.net/gh/codetheworld-io/static-files/FX-LED.TTF");  }
+    @font-face {  font-family: "hack";  src: url("https://cdn.jsdelivr.net/gh/codetheworld-io/static-files/Hack-Bold.ttf");  }
+
+    html,
+    body {
+        margin: 0;
+        padding: 0;
+        background: #000000;
+        height: 100%;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .digital-clock {
+      background-color: #000;
+      color: #fff;
+      display: flex;
+      border-radius: 2rem;
+      user-select: none;
+      padding: 0 2rem;
+      border: 0.5rem solid #2d2d2d;
+    }
+
+    .date {
+      text-align: center;
+      font-family: "hack";
+      color: #fff;
+      margin-bottom: 1rem;
+    }
+
+    .week {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      width: 3rem;
+      color: #2d2d2d;
+      font-weight: bold;
+      font-family: "hack";
+    }
+
+    .week .active {
+      color: white;
+    }
+
+    .time {
+      font-family: "FX_LED";
+    }
+
+    .hour, .min, .dot {
+      display: inline;
+      font-size: 13rem;
+    }
+
+    .min {
+      display: math;
+    }
+
+    .invisble {
+      visibility: hidden;
+    }
+  </style>
+</head>
+<body>
+  <div class="digital-clock">
+    <div class="week">
+      <div class="date"></div>
+      <div class="active">SUN</div>
+      <div>MON</div>
+      <div>TUE</div>
+      <div>WED</div>
+      <div>THU</div>
+      <div>FRI</div>
+      <div>SAT</div>
+    </div>
+    <div class="time">
+      <div class="hour">00</div>
+      <div class="dot">:</div>
+      <div class="min">00</div>
+    </div>
+  </div>
+
+  <script>
+    const $ = (selector) => {
+      return document.querySelector(selector);
+    }
+    const dateElement = $(".date");
+    const hour = $(".hour");
+    const dot = $(".dot");
+    const min = $(".min");
+    const week = $(".week");
+    let showDot = true;
+  
+    const months = ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"];
+  
+    function update() {
+      showDot = !showDot;
+      const now = new Date();
+  
+      dateElement.textContent = `${months[now.getMonth()]} ${now.getDate()}`;
+      
+      if (showDot) {
+        dot.classList.add("invisble");
+      } else {
+        dot.classList.remove("invisble");
+      }
+      hour.textContent = String(now.getHours()).padStart(2, "0");
+      min.textContent = String(now.getMinutes()).padStart(2, "0");
+  
+      Array
+        .from(week.children)
+        .forEach(
+          (ele) => {
+            ele.classList.remove('active');
+          }
+        );
+      week
+        .children[now.getDay()]
+        .classList.add('active');
+    };
+  
+    setInterval(update, 500);
+  </script>
+  
+</body>
+</html>
